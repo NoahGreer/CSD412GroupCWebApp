@@ -53,9 +53,13 @@ namespace CSD412GroupCWebApp
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+            // Where are you going?
             app.UseRouting();
 
+            // Who are you?
             app.UseAuthentication();
+
+            // Are you allowed to go there?
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
