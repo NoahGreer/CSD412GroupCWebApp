@@ -16,7 +16,7 @@ namespace CSD412GroupCWebApp.Models
         public string Content { get; set; }
         [Display(Name = "URL Slug")]
         public string UrlSlug { get; set; }
-        public Category Categories { get; set; }
+        public List<Category> Categories { get; set; }
         [Display(Name = "Date Posted")]
         public string DatePosted { get; set; }
     }
