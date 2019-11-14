@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CSD412GroupCWebApp.Data;
 using CSD412GroupCWebApp.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace CSD412GroupCWebApp
 {
@@ -14,15 +15,19 @@ namespace CSD412GroupCWebApp
     {
         private readonly ApplicationDbContext _context;
 
-        public ArticlesController(ApplicationDbContext context)
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        public ArticlesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         // GET: Articles
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Article.ToListAsync());
+            var applicationDbContext = _context.Article.Include(a => a.Author);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Articles/Details/5
@@ -34,6 +39,7 @@ namespace CSD412GroupCWebApp
             }
 
             var article = await _context.Article
+                .Include(a => a.Author)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (article == null)
             {
@@ -54,14 +60,16 @@ namespace CSD412GroupCWebApp
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Author,Title,Content,UrlSlug,DatePosted")] Article article)
+        public async Task<IActionResult> Create([Bind("Id,Title,Content,UrlSlug,DatePosted")] Article article)
         {
             if (ModelState.IsValid)
             {
+                article.AuthorId = _userManager.GetUserId(User);
                 _context.Add(article);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["AuthorId"] = new SelectList(_context.Users, "Id", "Id", article.AuthorId);
             return View(article);
         }
 
@@ -86,7 +94,7 @@ namespace CSD412GroupCWebApp
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("Id,Author,Title,Content,UrlSlug,DatePosted")] Article article)
+        public async Task<IActionResult> Edit(long id, [Bind("Id,Title,Content,UrlSlug,DatePosted")] Article article)
         {
             if (id != article.Id)
             {
@@ -125,6 +133,7 @@ namespace CSD412GroupCWebApp
             }
 
             var article = await _context.Article
+                .Include(a => a.Author)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (article == null)
             {
