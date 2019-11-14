@@ -10,7 +10,8 @@ namespace CSD412GroupCWebApp.Models
     {
         public long Id { get; set; }
         public Blog Blog { get; set; }
-        public string Author { get; set; }
+        public string AuthorId { get; set; }
+        public virtual ApplicationUser Author { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
         [Display(Name = "URL Slug")]
