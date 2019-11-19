@@ -86,7 +86,15 @@ namespace CSD412GroupCWebApp
             {
                 return NotFound();
             }
-            return View(article);
+
+            var categories = await _context.Category.ToListAsync();
+            ArticleViewModel articleViewModel = new ArticleViewModel
+            {
+                Article = article,
+                Categories = categories
+            };
+
+            return View(articleViewModel);
         }
 
         // POST: Articles/Edit/5
@@ -94,23 +102,25 @@ namespace CSD412GroupCWebApp
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("Id,Title,Content,UrlSlug,DatePosted")] Article article)
+        public async Task<IActionResult> Edit(long id, ArticleViewModel articleViewModel)
         {
-            if (id != article.Id)
+            if (id != articleViewModel.Article.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
+                articleViewModel.Article.Categories = articleViewModel.Categories;
+
                 try
                 {
-                    _context.Update(article);
+                    _context.Update(articleViewModel.Article);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ArticleExists(article.Id))
+                    if (!ArticleExists(articleViewModel.Article.Id))
                     {
                         return NotFound();
                     }
@@ -121,7 +131,7 @@ namespace CSD412GroupCWebApp
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(article);
+            return View(articleViewModel);
         }
 
         // GET: Articles/Delete/5
