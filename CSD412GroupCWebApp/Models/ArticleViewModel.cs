@@ -10,14 +10,15 @@ namespace CSD412GroupCWebApp.Models
     public class ArticleViewModel
     {
         public Article Article { get; set; }
-        public List<Category> Categories { get; set; }
+        public long[] SelectedCategoryIds { get; set; }
+        public List<Category> CategoryOptions { get; set; }
 
         // This method is used to populate the options of the DropdownList
-        public IEnumerable<SelectListItem> GetCategoriesAsSelectListItems()
+        public IEnumerable<SelectListItem> GetCategoryOptionsAsSelectListItems()
         {
             // Display the "Name" of the Category in DropDown 
             // Use "Id" for the selected value
-            return new SelectList(Categories, "Id", "Name");
+            return new SelectList(CategoryOptions, "Id", "Name");
         }
     }
 }
