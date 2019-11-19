@@ -50,9 +50,16 @@ namespace CSD412GroupCWebApp
         }
 
         // GET: Articles/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            var categories = await _context.Category.ToListAsync();
+            ArticleViewModel articleViewModel = new ArticleViewModel
+            {
+                Article = new Article(),
+                Categories = categories
+            };
+
+            return View(articleViewModel);
         }
 
         // POST: Articles/Create
@@ -60,17 +67,18 @@ namespace CSD412GroupCWebApp
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Content,UrlSlug,DatePosted")] Article article)
+        public async Task<IActionResult> Create(ArticleViewModel articleViewModel)
         {
             if (ModelState.IsValid)
             {
-                article.AuthorId = _userManager.GetUserId(User);
-                _context.Add(article);
+                articleViewModel.Article.AuthorId = _userManager.GetUserId(User);
+                articleViewModel.Article.Categories = articleViewModel.Categories;
+                _context.Add(articleViewModel.Article);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["AuthorId"] = new SelectList(_context.Users, "Id", "Id", article.AuthorId);
-            return View(article);
+
+            return View(articleViewModel);
         }
 
         // GET: Articles/Edit/5
