@@ -26,7 +26,7 @@ namespace CSD412GroupCWebApp
         // GET: Articles
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Article.Include(a => a.Author);
+            var applicationDbContext = _context.Article.Include(a => a.Author).Include(a => a.Categories);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -40,6 +40,7 @@ namespace CSD412GroupCWebApp
 
             var article = await _context.Article
                 .Include(a => a.Author)
+                .Include(a => a.Categories)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (article == null)
             {
@@ -52,11 +53,11 @@ namespace CSD412GroupCWebApp
         // GET: Articles/Create
         public async Task<IActionResult> Create()
         {
-            var categories = await _context.Category.ToListAsync();
+            var categoryOptions = await _context.Category.ToListAsync();
             ArticleViewModel articleViewModel = new ArticleViewModel
             {
                 Article = new Article(),
-                Categories = categories
+                CategoryOptions = categoryOptions
             };
 
             return View(articleViewModel);
@@ -72,7 +73,7 @@ namespace CSD412GroupCWebApp
             if (ModelState.IsValid)
             {
                 articleViewModel.Article.AuthorId = _userManager.GetUserId(User);
-                articleViewModel.Article.Categories = articleViewModel.Categories;
+                articleViewModel.Article.Categories = _context.Category.Where(c => articleViewModel.SelectedCategoryIds.Contains(c.Id)).ToList();
                 _context.Add(articleViewModel.Article);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -89,17 +90,22 @@ namespace CSD412GroupCWebApp
                 return NotFound();
             }
 
-            var article = await _context.Article.FindAsync(id);
+            var article = await _context.Article
+                .Include(a => a.Categories)
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (article == null)
             {
                 return NotFound();
             }
 
-            var categories = await _context.Category.ToListAsync();
+            var selectedCategoryIds = article.Categories.Select(x => x.Id).ToArray();
+
+            var categoryOptions = await _context.Category.ToListAsync();
             ArticleViewModel articleViewModel = new ArticleViewModel
             {
                 Article = article,
-                Categories = categories
+                SelectedCategoryIds = selectedCategoryIds,
+                CategoryOptions = categoryOptions
             };
 
             return View(articleViewModel);
@@ -119,7 +125,7 @@ namespace CSD412GroupCWebApp
 
             if (ModelState.IsValid)
             {
-                articleViewModel.Article.Categories = articleViewModel.Categories;
+                articleViewModel.Article.Categories = _context.Category.Where(c => articleViewModel.SelectedCategoryIds.Contains(c.Id)).ToList();
 
                 try
                 {
