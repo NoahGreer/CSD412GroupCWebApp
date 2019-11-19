@@ -1,4 +1,4 @@
-﻿@model CSD412GroupCWebApp.Models.Article
+﻿@model CSD412GroupCWebApp.Models.ArticleViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -13,19 +13,24 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
+                <label asp-for="Article.Title" class="control-label"></label>
+                <input asp-for="Article.Title" class="form-control" />
+                <span asp-validation-for="Article.Title" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Content" class="control-label"></label>
-                <input asp-for="Content" class="form-control" />
-                <span asp-validation-for="Content" class="text-danger"></span>
+                <label asp-for="Article.Content" class="control-label"></label>
+                <input asp-for="Article.Content" class="form-control" />
+                <span asp-validation-for="Article.Content" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="UrlSlug" class="control-label"></label>
-                <input asp-for="UrlSlug" class="form-control" />
-                <span asp-validation-for="UrlSlug" class="text-danger"></span>
+                <label asp-for="Article.UrlSlug" class="control-label"></label>
+                <input asp-for="Article.UrlSlug" class="form-control" />
+                <span asp-validation-for="Article.UrlSlug" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Categories" class="control-label"></label>
+                <select asp-for="Article.Categories" asp-items="@Model.GetCategoriesAsSelectListItems()" class="form-control"></select>
+                <span asp-validation-for="Article.Categories" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
