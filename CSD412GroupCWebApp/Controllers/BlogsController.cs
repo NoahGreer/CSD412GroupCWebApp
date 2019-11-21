@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CSD412GroupCWebApp.Data;
 using CSD412GroupCWebApp.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CSD412GroupCWebApp
 {
@@ -20,12 +21,14 @@ namespace CSD412GroupCWebApp
         }
 
         // GET: Blogs
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Blog.ToListAsync());
         }
 
         // GET: Blogs/Details/5
+        [AllowAnonymous]
         public async Task<IActionResult> Details(long? id)
         {
             if (id == null)

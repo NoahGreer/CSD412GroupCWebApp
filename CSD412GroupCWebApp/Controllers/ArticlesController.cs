@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using CSD412GroupCWebApp.Data;
 using CSD412GroupCWebApp.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CSD412GroupCWebApp
 {
@@ -24,6 +25,7 @@ namespace CSD412GroupCWebApp
         }
 
         // GET: Articles
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Article.Include(a => a.Author).Include(a => a.Categories);
@@ -31,6 +33,7 @@ namespace CSD412GroupCWebApp
         }
 
         // GET: Articles/Details/5
+        [AllowAnonymous]
         public async Task<IActionResult> Details(long? id)
         {
             if (id == null)

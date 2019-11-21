@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using CSD412GroupCWebApp.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CSD412GroupCWebApp.Controllers
 {
@@ -18,11 +19,13 @@ namespace CSD412GroupCWebApp.Controllers
             _logger = logger;
         }
 
+        [AllowAnonymous]
         public IActionResult Index()
         {
             return View();
         }
 
+        [AllowAnonymous]
         public IActionResult Privacy()
         {
             return View();
