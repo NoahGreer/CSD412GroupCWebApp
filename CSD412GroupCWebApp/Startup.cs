@@ -36,6 +36,7 @@ namespace CSD412GroupCWebApp
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            services.AddCors();
             services.AddRazorPages();
 
             services.AddControllersWithViews(config => 
@@ -95,6 +96,8 @@ namespace CSD412GroupCWebApp
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            app.UseCors();
 
             // Where are you going?
             app.UseRouting();
