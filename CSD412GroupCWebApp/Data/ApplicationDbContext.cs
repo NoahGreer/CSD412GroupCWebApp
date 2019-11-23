@@ -17,6 +17,16 @@ namespace CSD412GroupCWebApp.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            builder.Entity<Category>().HasData(new List<Category>()
+            {
+                new Category() { Id = 1, Name = "Programming", Description = "Articles about programming" },
+                new Category() { Id = 2, Name = "Music", Description = "Articles about music" },
+                new Category() { Id = 3, Name = "Movies", Description = "Articles about movies" },
+                new Category() { Id = 4, Name = "Art", Description = "Articles about art" },
+                new Category() { Id = 5, Name = "Travel", Description = "Articles about travel" },
+                new Category() { Id = 6, Name = "Science", Description = "Articles about science" },
+            });
         }
 
         public DbSet<CSD412GroupCWebApp.Models.Category> Category { get; set; }
