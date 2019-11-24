@@ -150,6 +150,11 @@ namespace CSD412GroupCWebApp
                 }
             }
         }
+
+        private async Task InitializeOwnerUserRoles(UserManager<ApplicationUser> userManager, string[] roleNames, string ownerEmailAddress)
+        {
+            ApplicationUser user = await userManager.FindByNameAsync(ownerEmailAddress);
+            await userManager.AddToRolesAsync(user, roleNames);
         }
     }
 }
