@@ -139,6 +139,17 @@ namespace CSD412GroupCWebApp
 
             return user;
         }
+
+        private async Task InitializeRoles(RoleManager<IdentityRole> roleManager, string[] roleNames)
+        {
+            foreach (string roleName in roleNames)
+            {
+                if (!roleManager.Roles.Any(r => r.Name == roleName))
+                {
+                    await roleManager.CreateAsync(new IdentityRole(roleName));
+                }
+            }
+        }
         }
     }
 }
