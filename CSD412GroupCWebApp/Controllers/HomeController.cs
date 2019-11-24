@@ -5,24 +5,29 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using CSD412GroupCWebApp.Data;
 using CSD412GroupCWebApp.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 namespace CSD412GroupCWebApp.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly ApplicationDbContext _context;
+        public HomeController(ApplicationDbContext context, ILogger<HomeController> logger)
         {
             _logger = logger;
+            _context = context;
         }
 
         [AllowAnonymous]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var applicationDbContext = _context.Article.Include(a => a.Author)
+                                                       .Include(a => a.Categories);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         [AllowAnonymous]
