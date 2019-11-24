@@ -31,8 +31,6 @@ namespace CSD412GroupCWebApp.Data
 
         public DbSet<CSD412GroupCWebApp.Models.Category> Category { get; set; }
 
-        public DbSet<CSD412GroupCWebApp.Models.Blog> Blog { get; set; }
-
         public DbSet<CSD412GroupCWebApp.Models.Article> Article { get; set; }
     }
 }
