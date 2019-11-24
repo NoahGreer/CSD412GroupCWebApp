@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CSD412GroupCWebApp.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CSD412GroupCWebApp
 {
@@ -21,12 +22,16 @@ namespace CSD412GroupCWebApp
         }
 
         // GET: Roles
+        [Authorize(Roles="Owner")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Index()
         {
             return View(await _roleManager.Roles.ToListAsync());
         }
 
         // GET: Roles/Edit/5
+        [Authorize(Roles = "Owner")]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
@@ -67,6 +72,8 @@ namespace CSD412GroupCWebApp
         }
 
         // POST: Roles/Edit/5
+        [Authorize(Roles = "Owner")]
+        [Authorize(Roles = "Administrator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(RoleViewModel model)
