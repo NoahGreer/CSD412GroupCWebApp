@@ -116,6 +116,29 @@ namespace CSD412GroupCWebApp
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+
+        private async Task<ApplicationUser> InitializeOwnerUser(UserManager<ApplicationUser> userManager, string ownerEmailAddress)
+        {
+            var user = await userManager.Users.FirstOrDefaultAsync(u => u.UserName == ownerEmailAddress);
+            if (user == null)
+            {
+                user = new ApplicationUser
+                {
+                    Name = "Site Owner",
+                    Email = ownerEmailAddress,
+                    NormalizedEmail = ownerEmailAddress.ToUpper(),
+                    UserName = ownerEmailAddress,
+                    NormalizedUserName = ownerEmailAddress.ToUpper(),
+                    LockoutEnabled = false,
+                    SecurityStamp = Guid.NewGuid().ToString("D")
+                };
+
+                string defaultOwnerPassword = "Secret1!";
+                await userManager.CreateAsync(user, defaultOwnerPassword);
+            }
+
+            return user;
+        }
         }
     }
 }
