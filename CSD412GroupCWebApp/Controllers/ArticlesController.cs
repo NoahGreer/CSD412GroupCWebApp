@@ -101,6 +101,11 @@ namespace CSD412GroupCWebApp
                 return NotFound();
             }
 
+            if (UserIsAdminOrArticleOwner(article))
+            {
+                return Forbid();
+            }
+
             var selectedCategoryIds = article.Categories.Select(x => x.Id).ToArray();
 
             var categoryOptions = await _context.Category.ToListAsync();
@@ -126,13 +131,27 @@ namespace CSD412GroupCWebApp
                 return NotFound();
             }
 
+            var article = await _context.Article
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (article == null)
+            {
+                return NotFound();
+            }
+
+            if (UserIsAdminOrArticleOwner(article))
+            {
+                return Forbid();
+            }
+
             if (ModelState.IsValid)
             {
-                articleViewModel.Article.Categories = _context.Category.Where(c => articleViewModel.SelectedCategoryIds.Contains(c.Id)).ToList();
+                article.Categories = _context.Category.Where(c => articleViewModel.SelectedCategoryIds.Contains(c.Id)).ToList();
+                article.Title = articleViewModel.Article.Title;
+                article.Content = articleViewModel.Article.Content;
 
                 try
                 {
-                    _context.Update(articleViewModel.Article);
+                    _context.Update(article);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -167,6 +186,11 @@ namespace CSD412GroupCWebApp
                 return NotFound();
             }
 
+            if (UserIsAdminOrArticleOwner(article))
+            {
+                return Forbid();
+            }
+
             return View(article);
         }
 
@@ -176,6 +200,11 @@ namespace CSD412GroupCWebApp
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
             var article = await _context.Article.FindAsync(id);
+
+            if (UserIsAdminOrArticleOwner(article))
+            {
+                return Forbid();
+            }
             _context.Article.Remove(article);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
@@ -184,6 +213,16 @@ namespace CSD412GroupCWebApp
         private bool ArticleExists(long id)
         {
             return _context.Article.Any(e => e.Id == id);
+        }
+
+        private bool UserIsAdminOrArticleOwner(Article article)
+        {
+            var isAuthorized = User.IsInRole(Constants.OwnerRole) ||
+                               User.IsInRole(Constants.AdministratorRole);
+
+            var currentUserId = _userManager.GetUserId(User);
+
+            return !isAuthorized && currentUserId != article.AuthorId;
         }
     }
 }
