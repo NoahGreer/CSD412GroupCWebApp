@@ -117,12 +117,11 @@ namespace CSD412GroupCWebApp
                 endpoints.MapRazorPages();
             });
 
-            string ownerEmailAddress = "owner@lwtech.edu";
-            InitializeOwnerUser(userManager, ownerEmailAddress).Wait();
+            
+            InitializeOwnerUser(userManager, Constants.OwnerEmailAddress).Wait();
 
-            string[] roleNames = new string[] { "Owner", "Administrator", "Author" };
-            InitializeRoles(roleManager, roleNames).Wait();
-            InitializeOwnerUserRoles(userManager, roleNames, ownerEmailAddress).Wait();
+            InitializeRoles(roleManager, Constants.RoleNames).Wait();
+            InitializeOwnerUserRoles(userManager, Constants.RoleNames, Constants.OwnerEmailAddress).Wait();
         }
 
         private async Task<ApplicationUser> InitializeOwnerUser(UserManager<ApplicationUser> userManager, string ownerEmailAddress)
