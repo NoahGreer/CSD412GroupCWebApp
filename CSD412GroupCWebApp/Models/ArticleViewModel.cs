@@ -10,6 +10,7 @@ namespace CSD412GroupCWebApp.Models
     public class ArticleViewModel
     {
         public Article Article { get; set; }
+        [Display(Name = "Select Category")]
         public long[] SelectedCategoryIds { get; set; } = new long[0];
         public List<Category> CategoryOptions { get; set; }
 
