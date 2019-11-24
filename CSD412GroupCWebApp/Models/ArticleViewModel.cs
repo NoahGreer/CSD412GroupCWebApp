@@ -10,7 +10,7 @@ namespace CSD412GroupCWebApp.Models
     public class ArticleViewModel
     {
         public Article Article { get; set; }
-        public long[] SelectedCategoryIds { get; set; }
+        public long[] SelectedCategoryIds { get; set; } = new long[0];
         public List<Category> CategoryOptions { get; set; }
 
         // This method is used to populate the options of the DropdownList
