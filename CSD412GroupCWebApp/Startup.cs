@@ -82,7 +82,7 @@ namespace CSD412GroupCWebApp
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             if (env.IsDevelopment())
             {
@@ -116,6 +116,14 @@ namespace CSD412GroupCWebApp
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
+
+            string ownerEmailAddress = "owner@lwtech.edu";
+            InitializeOwnerUser(userManager, ownerEmailAddress).Wait();
+
+            string[] roleNames = new string[] { "Owner", "Administrator", "Author" };
+            InitializeRoles(roleManager, roleNames).Wait();
+            InitializeOwnerUserRoles(userManager, roleNames, ownerEmailAddress).Wait();
+        }
 
         private async Task<ApplicationUser> InitializeOwnerUser(UserManager<ApplicationUser> userManager, string ownerEmailAddress)
         {
