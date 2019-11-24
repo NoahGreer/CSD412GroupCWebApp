@@ -1,0 +1,37 @@
+﻿@model IEnumerable<IdentityRole>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <th></th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var role in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => role.Name)
+            </td>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <td>
+                    <a asp-action="Edit" asp-route-id="@role.Id">Edit</a>
+                </td>
+            }
+        </tr>
+        }
+    </tbody>
+</table>
