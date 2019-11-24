@@ -1,12 +1,56 @@
-﻿@{
+﻿@model IEnumerable<CSD412GroupCWebApp.Models.Article>
+@{
     ViewData["Title"] = "Home Page";
 }
 
-    <div class="text-center">
-        <img src="~/image/bg-header-sized.jpg" style="width:100%; float:left;padding-left:0px;" />
-        <h1 class="display-4">Welcome to Group C Project</h1>
-        <p class="text-left">
-            <h3>Project Title: Posting Blog</h3>
-            Groups Team Members: Nathan Obrien, Noah Greer, & Sareh Akbarpour
-        </p>
-    </div>
+<div class="text-center">
+    <img src="~/image/bg-header-sized.jpg" style="width:100%; float:left;padding-left:0px;" />
+    <h1 class="display-4">Welcome to Group C Project</h1>
+    <p class="text-left">
+        <h3>Project Title: Posting Blog</h3>
+        Groups Team Members: Nathan Obrien, Noah Greer, & Sareh Akbarpour
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Author)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Title)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Categories)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UrlSlug)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DatePosted)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Author.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Categories)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UrlSlug)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DatePosted)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
