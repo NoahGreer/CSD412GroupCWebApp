@@ -199,12 +199,18 @@ namespace CSD412GroupCWebApp
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
-            var article = await _context.Article.FindAsync(id);
+            var article = await _context.Article
+                .Include(a => a.Categories)
+                .FirstOrDefaultAsync(m => m.Id == id);
 
             if (UserIsAdminOrArticleOwner(article))
             {
                 return Forbid();
             }
+
+            article.Categories.Clear();
+            _context.Update(article);
+
             _context.Article.Remove(article);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
