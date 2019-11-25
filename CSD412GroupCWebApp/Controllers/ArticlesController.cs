@@ -57,33 +57,16 @@ namespace CSD412GroupCWebApp
         // GET: Articles/Create
         public async Task<IActionResult> Create()
         {
-            var categoryOptions = await _context.Category.ToListAsync();
-            ArticleViewModel articleViewModel = new ArticleViewModel
+            var article = new Article()
             {
-                Article = new Article(),
-                CategoryOptions = categoryOptions
+                AuthorId = _userManager.GetUserId(User),
+                Title = "Draft " + DateTime.Now
             };
 
-            return View(articleViewModel);
-        }
+            _context.Article.Add(article);
+            await _context.SaveChangesAsync();
 
-        // POST: Articles/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ArticleViewModel articleViewModel)
-        {
-            if (ModelState.IsValid)
-            {
-                articleViewModel.Article.AuthorId = _userManager.GetUserId(User);
-                articleViewModel.Article.Categories = _context.Category.Where(c => articleViewModel.SelectedCategoryIds.Contains(c.Id)).ToList();
-                _context.Add(articleViewModel.Article);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-
-            return View(articleViewModel);
+            return RedirectToAction(nameof(Edit), new { id = article.Id });
         }
 
         // GET: Articles/Edit/5
