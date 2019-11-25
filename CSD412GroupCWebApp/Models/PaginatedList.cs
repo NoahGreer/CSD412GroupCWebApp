@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CSD412GroupCWebApp.Models
 {
-    public class PaginatedList<T> : List<T>
+    public class PaginatedList<T> : List<T> where T : new()
     {
         public int PageIndex { get; private set; }
         public int TotalPages { get; private set; }
@@ -41,6 +41,8 @@ namespace CSD412GroupCWebApp.Models
             var items = await source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
             return new PaginatedList<T>(items, count, pageIndex, pageSize);
         }
+
+        public T Default { get; } = new T();
     }
 }
 
