@@ -24,19 +24,9 @@
                 <span asp-validation-for="Article.Content" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Article.UrlSlug" class="control-label"></label>
-                <input asp-for="Article.UrlSlug" class="form-control" />
-                <span asp-validation-for="Article.UrlSlug" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="SelectedCategoryIds" class="control-label"></label>
                 <select asp-for="SelectedCategoryIds" asp-items="Model.GetCategoryOptionsAsSelectListItems()" class="form-control"></select>
                 <span asp-validation-for="SelectedCategoryIds" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Article.DatePosted" class="control-label"></label>
-                <input asp-for="Article.DatePosted" class="form-control" />
-                <span asp-validation-for="Article.DatePosted" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">

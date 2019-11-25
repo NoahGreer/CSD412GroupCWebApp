@@ -130,8 +130,23 @@ namespace CSD412GroupCWebApp
             if (ModelState.IsValid)
             {
                 article.Categories = _context.Category.Where(c => articleViewModel.SelectedCategoryIds.Contains(c.Id)).ToList();
-                article.Title = articleViewModel.Article.Title;
-                article.Content = articleViewModel.Article.Content;
+
+                var editedArticle = articleViewModel.Article;
+                article.Title = editedArticle.Title;
+                article.Content = editedArticle.Content;
+
+                if (!article.IsPublished && editedArticle.IsPublished)
+                {
+                    article.UrlSlug = Slugify(article.Title);
+                    article.DatePosted = DateTime.Now;
+                }
+                else if (article.IsPublished && !editedArticle.IsPublished)
+                {
+                    article.UrlSlug = null;
+                    article.DatePosted = null;
+                }
+
+                article.IsPublished = editedArticle.IsPublished;
 
                 try
                 {
