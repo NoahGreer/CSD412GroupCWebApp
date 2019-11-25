@@ -9,6 +9,7 @@ using CSD412GroupCWebApp.Data;
 using CSD412GroupCWebApp.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using System.Text.RegularExpressions;
 
 namespace CSD412GroupCWebApp
 {
@@ -229,6 +230,23 @@ namespace CSD412GroupCWebApp
             var currentUserId = _userManager.GetUserId(User);
 
             return !isAuthorized && currentUserId != article.AuthorId;
+        }
+
+        // Borrowed slugification logic from https://webmasters.stackexchange.com/a/1194
+        private static string RemoveAccent(string txt)
+        {
+            byte[] bytes = System.Text.Encoding.GetEncoding("Cyrillic").GetBytes(txt);
+            return System.Text.Encoding.ASCII.GetString(bytes);
+        }
+
+        // Borrowed slugification logic from https://webmasters.stackexchange.com/a/1194
+        private static string Slugify(string phrase)
+        {
+            string str = RemoveAccent(phrase).ToLower();
+            str = Regex.Replace(str, @"[^a-z0-9\s-]", ""); // Remove all non valid chars          
+            str = Regex.Replace(str, @"\s+", " ").Trim(); // convert multiple spaces into one space  
+            str = Regex.Replace(str, @"\s", "-"); // //Replace spaces by dashes
+            return str;
         }
     }
 }
