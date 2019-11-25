@@ -13,6 +13,8 @@ namespace CSD412GroupCWebApp.Models
         public virtual ApplicationUser Author { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
+        [Display(Name = "Is Published")]
+        public bool IsPublished { get; set; } = false;
         [Display(Name = "URL Slug")]
         public string UrlSlug { get; set; }
         public List<Category> Categories { get; set; }
