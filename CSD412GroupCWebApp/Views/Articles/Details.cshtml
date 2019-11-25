@@ -46,6 +46,12 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.DatePosted)
         </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.IsPublished)
+        </dt>
+        <dd class="col-sm-10">
+            @(Model.IsPublished ? "yes" : "no")
+        </dd>
     </dl>
 </div>
 <div>

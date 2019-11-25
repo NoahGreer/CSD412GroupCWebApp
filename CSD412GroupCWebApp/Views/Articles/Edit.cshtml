@@ -38,6 +38,11 @@
                 <input asp-for="Article.DatePosted" class="form-control" />
                 <span asp-validation-for="Article.DatePosted" class="text-danger"></span>
             </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Article.IsPublished" /> Publish?
+                </label>
+            </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

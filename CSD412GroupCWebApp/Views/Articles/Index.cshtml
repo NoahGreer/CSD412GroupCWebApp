@@ -32,6 +32,9 @@
             </th>
             @if (User.Identity.IsAuthenticated)
             {
+                <th>
+                    @Html.DisplayNameFor(model => model.IsPublished)
+                </th>
                 <th></th>
             }
         </tr>
@@ -57,6 +60,9 @@
                 </td>
                 @if (User.Identity.IsAuthenticated)
                 {
+                    <td>
+                        @(item.IsPublished ? "yes" : "no")
+                    </td>
                     <td>
                         <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                         <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
