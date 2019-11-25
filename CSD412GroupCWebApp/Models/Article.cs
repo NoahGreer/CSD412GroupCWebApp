@@ -19,6 +19,6 @@ namespace CSD412GroupCWebApp.Models
         public string UrlSlug { get; set; }
         public List<Category> Categories { get; set; }
         [Display(Name = "Date Posted")]
-        public string DatePosted { get; set; }
+        public DateTime? DatePosted { get; set; }
     }
 }
