@@ -38,7 +38,10 @@ namespace CSD412GroupCWebApp.Controllers
 
             ViewData["CurrentFilter"] = searchString;
 
-            var articles = _context.Article.AsQueryable();
+            var articles = _context.Article
+                .Include(a => a.Author)
+                .Include(a => a.Categories)
+                .AsQueryable();
 
             if (!string.IsNullOrEmpty(searchString))
             {
