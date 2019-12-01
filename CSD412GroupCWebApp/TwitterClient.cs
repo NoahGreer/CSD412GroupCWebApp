@@ -10,7 +10,7 @@ namespace CSD412GroupCWebApp
     {
         private TwitterContext context;
 
-        private static string url;
+        private string url;
 
         public TwitterClient(SingleUserInMemoryCredentialStore credentials)
         {
