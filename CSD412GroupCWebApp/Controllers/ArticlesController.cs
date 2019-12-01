@@ -33,6 +33,15 @@ namespace CSD412GroupCWebApp
             return View(await applicationDbContext.ToListAsync());
         }
 
+        // GET: api/Articles
+        [HttpGet]
+        [Route("api/[controller]")]
+        [AllowAnonymous]
+        public async Task<ActionResult<IEnumerable<Article>>> GetArticle()
+        {
+            return await _context.Article.ToListAsync();
+        }
+
         // GET: Articles/Details/5
         [AllowAnonymous]
         public async Task<IActionResult> Details(long? id)
