@@ -170,6 +170,19 @@ namespace CSD412GroupCWebApp
                 {
                     article.UrlSlug = Slugify(article.Title);
                     article.DatePosted = DateTime.Now;
+
+                    var link = Url.RouteUrl(new { controller = "Articles", action = "Display", id = article.UrlSlug });
+                    string baseUrl = "https://csd412groupcwebapp.azurewebsites.net";
+                    link = baseUrl + link;
+
+                    var twitterClient = new TwitterClient(Startup.TwitterCredentials);
+
+                    string message = "Come see our latest post at:";
+
+                    twitterClient.SetMessage(message);
+                    twitterClient.SetLink(link);
+
+                    await twitterClient.SendTweet();
                 }
                 else if (article.IsPublished && !editedArticle.IsPublished)
                 {
