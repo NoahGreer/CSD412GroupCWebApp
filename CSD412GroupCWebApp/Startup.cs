@@ -15,6 +15,7 @@ using Microsoft.Extensions.Hosting;
 using CSD412GroupCWebApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using LinqToTwitter;
 
 namespace CSD412GroupCWebApp
 {
@@ -26,7 +27,7 @@ namespace CSD412GroupCWebApp
         }
 
         public IConfiguration Configuration { get; }
-
+        public static SingleUserInMemoryCredentialStore TwitterCredentials { get; private set; }
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -79,6 +80,8 @@ namespace CSD412GroupCWebApp
                 options.AccessDeniedPath = "/Identity/Account/AccessDenied";
                 options.SlidingExpiration = true;
             });
+
+            TwitterCredentials = Configuration.GetSection("Twitter").Get<SingleUserInMemoryCredentialStore>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
