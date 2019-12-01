@@ -62,6 +62,29 @@ namespace CSD412GroupCWebApp
             return View(article);
         }
 
+        // GET: Articles/Display/article-url-slug
+        [AllowAnonymous]
+        public async Task<IActionResult> Display(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var article = await _context.Article
+                .Include(a => a.Author)
+                .Include(a => a.Categories)
+                .Where(a => a.IsPublished)
+                .FirstOrDefaultAsync(a => a.UrlSlug == id);
+
+            if (article == null)
+            {
+                return NotFound();
+            }
+
+            return View(article);
+        }
+
         // GET: Articles/Create
         public async Task<IActionResult> Create()
         {
