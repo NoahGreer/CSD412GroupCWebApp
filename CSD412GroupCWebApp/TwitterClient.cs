@@ -11,6 +11,7 @@ namespace CSD412GroupCWebApp
         private TwitterContext context;
 
         private string url;
+        private string message;
 
         public TwitterClient(SingleUserInMemoryCredentialStore credentials)
         {
@@ -22,6 +23,11 @@ namespace CSD412GroupCWebApp
             context = new TwitterContext(auth);
         }
 
+        public void SetMessage(string newMessage)
+        {
+            message = newMessage;
+        }
+
         public void SetLink(string newUrl)
         {
             url = newUrl;
@@ -29,7 +35,8 @@ namespace CSD412GroupCWebApp
 
         public async Task<Status> SendTweet()
         {
-            return await context.TweetAsync(url);
+            string status = message + " " + url;
+            return await context.TweetAsync(status);
         }
     }
 }
