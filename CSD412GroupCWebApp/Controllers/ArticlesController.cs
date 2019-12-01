@@ -43,7 +43,6 @@ namespace CSD412GroupCWebApp
         }
 
         // GET: Articles/Details/5
-        [AllowAnonymous]
         public async Task<IActionResult> Details(long? id)
         {
             if (id == null)
