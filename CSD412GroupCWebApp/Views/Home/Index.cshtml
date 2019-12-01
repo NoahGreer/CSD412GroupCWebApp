@@ -34,9 +34,6 @@
                     @Html.DisplayNameFor(model => model.Default.Categories)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Default.UrlSlug)
-                </th>
-                <th>
                     @Html.DisplayNameFor(model => model.Default.DatePosted)
                 </th>
             </tr>
@@ -49,13 +46,12 @@
                         @Html.DisplayFor(modelItem => item.Author.Name)
                     </td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Title)
+                        <a asp-controller="Articles" asp-action="Display" asp-route-id="@item.UrlSlug">
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </a>
                     </td>
                     <td>
                         @String.Join(", ", item.Categories.Select(c => c.Name))
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.UrlSlug)
                     </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.DatePosted)
