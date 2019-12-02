@@ -83,15 +83,7 @@ namespace CSD412GroupCWebApp
                 articles = articles.Where(a => (a.Categories.Select(c => c.Name.ToLower()).Contains(category.ToLower())));
             }
 
-            var articleResults = articles.Select(a => new ArticleDTO()
-            {
-                Author = a.Author.Name,
-                Title = a.Title,
-                Content = a.Content,
-                UrlSlug = a.UrlSlug,
-                Categories = a.Categories.Select(c => c.Name).ToList(),
-                DatePosted = a.DatePosted.Value
-            });
+            var articleResults = articles.Select(a => new ArticleDTO(a));
 
             return await articleResults.ToListAsync();
         }
