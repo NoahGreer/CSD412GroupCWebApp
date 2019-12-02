@@ -14,6 +14,16 @@ using Microsoft.Extensions.Logging;
 
 namespace CSD412GroupCWebApp
 {
+    public class ArticleDTO
+    {
+        public string Author { get; set; }
+        public string Title { get; set; }
+        public string Content { get; set; }
+        public string UrlSlug { get; set; }
+        public List<String> Categories { get; set; }
+        public DateTime DatePosted { get; set; }
+    }
+
     public class ArticlesController : Controller
     {
         private readonly ApplicationDbContext _context;
