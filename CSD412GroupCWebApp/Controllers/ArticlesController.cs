@@ -40,13 +40,28 @@ namespace CSD412GroupCWebApp
         [HttpGet]
         [Route("api/[controller]")]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<Article>>> GetArticle()
+        public async Task<ActionResult<IEnumerable<Article>>> GetArticle(string title, string author, string category)
         {
             var articles = _context.Article
                 .Include(a => a.Author)
                 .Include(a => a.Categories)
                 .Where(a => a.IsPublished)
                 .AsQueryable();
+
+            if (title != null)
+            {
+                articles = articles.Where(a => a.Title.ToLower().Contains(title.ToLower()));
+            }
+
+            if (author != null)
+            {
+                articles = articles.Where(a => a.Author.Name.ToLower().Contains(author.ToLower()));
+            }
+
+            if (category != null)
+            {
+                articles = articles.Where(a => (a.Categories.Select(c => c.Name.ToLower()).Contains(category.ToLower())));
+            }
 
             var articlesList = await articles.ToListAsync();
 
