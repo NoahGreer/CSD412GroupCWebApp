@@ -48,7 +48,17 @@ namespace CSD412GroupCWebApp
                 .Where(a => a.IsPublished) 
                 .AsQueryable();
 
-            return await articles.ToListAsync();
+            var articlesList = await articles.ToListAsync();
+
+            //Reassign article author with only the name field populated to hide sensitive information 
+            foreach (var article in articlesList)
+            {
+                article.Author = new ApplicationUser()
+                {
+                    Name = article.Author.Name
+                };
+            }
+            return articlesList;
         }
 
         // GET: Articles/Details/5
