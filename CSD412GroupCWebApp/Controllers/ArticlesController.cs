@@ -50,7 +50,7 @@ namespace CSD412GroupCWebApp
         [HttpGet]
         [Route("api/[controller]")]
         [AllowAnonymous]
-        public async Task<ActionResult<IEnumerable<Article>>> GetArticle(string title, string author, string category)
+        public async Task<ActionResult<IEnumerable<ArticleDTO>>> GetArticle(string title, string author, string category)
         {
             var articles = _context.Article
                 .Include(a => a.Author)
@@ -73,7 +73,17 @@ namespace CSD412GroupCWebApp
                 articles = articles.Where(a => (a.Categories.Select(c => c.Name.ToLower()).Contains(category.ToLower())));
             }
 
-            return await articles.ToListAsync();
+            var articleResults = articles.Select(a => new ArticleDTO()
+            {
+                Author = a.Author.Name,
+                Title = a.Title,
+                Content = a.Content,
+                UrlSlug = a.UrlSlug,
+                Categories = a.Categories.Select(c => c.Name).ToList(),
+                DatePosted = a.DatePosted.Value
+            });
+
+            return await articleResults.ToListAsync();
         }
 
         // GET: Articles/Details/5
