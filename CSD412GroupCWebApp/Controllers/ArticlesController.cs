@@ -10,6 +10,7 @@ using CSD412GroupCWebApp.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
 using System.Text.RegularExpressions;
+using Microsoft.Extensions.Logging;
 
 namespace CSD412GroupCWebApp
 {
@@ -19,10 +20,12 @@ namespace CSD412GroupCWebApp
 
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public ArticlesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        private readonly ILogger<ArticlesController> _logger;
+        public ArticlesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, ILogger<ArticlesController> logger)
         {
             _context = context;
             _userManager = userManager;
+            _logger = logger;
         }
 
         // GET: Articles
@@ -175,14 +178,20 @@ namespace CSD412GroupCWebApp
                     string baseUrl = "https://csd412groupcwebapp.azurewebsites.net";
                     link = baseUrl + link;
 
-                    var twitterClient = new TwitterClient(Startup.TwitterCredentials);
+                    if (Startup.TwitterCredentials != null)
+                    {
+                        var twitterClient = new TwitterClient(Startup.TwitterCredentials);
+                        string message = "Come see our latest post at:";
 
-                    string message = "Come see our latest post at:";
+                        twitterClient.SetMessage(message);
+                        twitterClient.SetLink(link);
 
-                    twitterClient.SetMessage(message);
-                    twitterClient.SetLink(link);
-
-                    await twitterClient.SendTweet();
+                        await twitterClient.SendTweet();
+                    } 
+                    else
+                    {
+                        _logger.LogError("Twitter credentials not available. Could not send tweet");   
+                    }
                 }
                 else if (article.IsPublished && !editedArticle.IsPublished)
                 {
