@@ -42,10 +42,10 @@ namespace CSD412GroupCWebApp
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Article>>> GetArticle()
         {
-            var articles = _context.Article    
+            var articles = _context.Article
                 .Include(a => a.Author)
                 .Include(a => a.Categories)
-                .Where(a => a.IsPublished) 
+                .Where(a => a.IsPublished)
                 .AsQueryable();
 
             var articlesList = await articles.ToListAsync();
@@ -203,10 +203,10 @@ namespace CSD412GroupCWebApp
                         twitterClient.SetLink(link);
 
                         await twitterClient.SendTweet();
-                    } 
+                    }
                     else
                     {
-                        _logger.LogError("Twitter credentials not available. Could not send tweet");   
+                        _logger.LogError("Twitter credentials not available. Could not send tweet");
                     }
                 }
                 else if (article.IsPublished && !editedArticle.IsPublished)
