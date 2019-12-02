@@ -42,7 +42,13 @@ namespace CSD412GroupCWebApp
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Article>>> GetArticle()
         {
-            return await _context.Article.ToListAsync();
+            var articles = _context.Article    
+                .Include(a => a.Author)
+                .Include(a => a.Categories)
+                .Where(a => a.IsPublished) 
+                .AsQueryable();
+
+            return await articles.ToListAsync();
         }
 
         // GET: Articles/Details/5
