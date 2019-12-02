@@ -16,6 +16,16 @@ namespace CSD412GroupCWebApp
 {
     public class ArticleDTO
     {
+        public ArticleDTO(Article article)
+        {
+            Author = article.Author.Name;
+            Title = article.Title;
+            Content = article.Content;
+            UrlSlug = article.UrlSlug;
+            Categories = article.Categories.Select(c => c.Name).ToList();
+            DatePosted = article.DatePosted.Value;
+        }
+
         public string Author { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
