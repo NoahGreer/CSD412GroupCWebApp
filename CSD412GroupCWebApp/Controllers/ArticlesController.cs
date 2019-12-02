@@ -20,7 +20,7 @@ namespace CSD412GroupCWebApp
         public string Title { get; set; }
         public string Content { get; set; }
         public string UrlSlug { get; set; }
-        public List<String> Categories { get; set; }
+        public List<string> Categories { get; set; }
         public DateTime DatePosted { get; set; }
     }
 
