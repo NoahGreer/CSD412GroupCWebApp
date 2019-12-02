@@ -63,17 +63,7 @@ namespace CSD412GroupCWebApp
                 articles = articles.Where(a => (a.Categories.Select(c => c.Name.ToLower()).Contains(category.ToLower())));
             }
 
-            var articlesList = await articles.ToListAsync();
-
-            //Reassign article author with only the name field populated to hide sensitive information 
-            foreach (var article in articlesList)
-            {
-                article.Author = new ApplicationUser()
-                {
-                    Name = article.Author.Name
-                };
-            }
-            return articlesList;
+            return await articles.ToListAsync();
         }
 
         // GET: Articles/Details/5
