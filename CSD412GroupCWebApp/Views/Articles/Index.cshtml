@@ -22,7 +22,7 @@
                 @Html.DisplayNameFor(model => model.Title)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Categories)
+                @Html.DisplayNameFor(model => model.ArticleCategories)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.UrlSlug)
@@ -50,7 +50,7 @@
                     @Html.DisplayFor(modelItem => item.Title)
                 </td>
                 <td>
-                    @String.Join(", ", item.Categories.Select(c => c.Name))
+                    @String.Join(", ", item.ArticleCategories.Select(c => c.Category.Name))
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.UrlSlug)
