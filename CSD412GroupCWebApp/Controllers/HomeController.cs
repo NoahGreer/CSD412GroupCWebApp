@@ -40,7 +40,8 @@ namespace CSD412GroupCWebApp.Controllers
 
             var articles = _context.Article
                 .Include(a => a.Author)
-                .Include(a => a.Categories)
+                .Include(a => a.ArticleCategories)
+                .ThenInclude(ac => ac.Category)
                 .Where(a => a.IsPublished)
                 .AsQueryable();
 

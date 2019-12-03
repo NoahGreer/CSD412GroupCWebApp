@@ -22,7 +22,7 @@ namespace CSD412GroupCWebApp
             Title = article.Title;
             Content = article.Content;
             UrlSlug = article.UrlSlug;
-            Categories = article.Categories.Select(c => c.Name).ToList();
+            Categories = article.ArticleCategories.Select(ac => ac.Category).Select(c => c.Name).ToList();
             DatePosted = article.DatePosted.Value;
         }
 
@@ -52,7 +52,7 @@ namespace CSD412GroupCWebApp
         [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Article.Include(a => a.Author).Include(a => a.Categories);
+            var applicationDbContext = _context.Article.Include(a => a.Author).Include(a => a.ArticleCategories).ThenInclude(ac => ac.Category);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -64,7 +64,8 @@ namespace CSD412GroupCWebApp
         {
             var articles = _context.Article
                 .Include(a => a.Author)
-                .Include(a => a.Categories)
+                .Include(a => a.ArticleCategories)
+                .ThenInclude(ac => ac.Category)
                 .Where(a => a.IsPublished)
                 .AsQueryable();
 
@@ -80,7 +81,7 @@ namespace CSD412GroupCWebApp
 
             if (category != null)
             {
-                articles = articles.Where(a => (a.Categories.Select(c => c.Name.ToLower()).Contains(category.ToLower())));
+                articles = articles.Where(a => (a.ArticleCategories.Select(ac => ac.Category.Name.ToLower()).Contains(category.ToLower())));
             }
 
             var articleResults = articles.Select(a => new ArticleDTO(a));
@@ -98,7 +99,8 @@ namespace CSD412GroupCWebApp
 
             var article = await _context.Article
                 .Include(a => a.Author)
-                .Include(a => a.Categories)
+                .Include(a => a.ArticleCategories)
+                .ThenInclude(ac => ac.Category)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (article == null)
             {
@@ -119,7 +121,8 @@ namespace CSD412GroupCWebApp
 
             var article = await _context.Article
                 .Include(a => a.Author)
-                .Include(a => a.Categories)
+                .Include(a => a.ArticleCategories)
+                .ThenInclude(ac => ac.Category)
                 .Where(a => a.IsPublished)
                 .FirstOrDefaultAsync(a => a.UrlSlug == id);
 
@@ -155,7 +158,7 @@ namespace CSD412GroupCWebApp
             }
 
             var article = await _context.Article
-                .Include(a => a.Categories)
+                .Include(a => a.ArticleCategories)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (article == null)
             {
@@ -167,7 +170,7 @@ namespace CSD412GroupCWebApp
                 return Forbid();
             }
 
-            var selectedCategoryIds = article.Categories.Select(x => x.Id).ToArray();
+            var selectedCategoryIds = article.ArticleCategories.Select(x => x.CategoryId).ToArray();
 
             var categoryOptions = await _context.Category.ToListAsync();
             ArticleViewModel articleViewModel = new ArticleViewModel
@@ -193,6 +196,7 @@ namespace CSD412GroupCWebApp
             }
 
             var article = await _context.Article
+                .Include(a => a.ArticleCategories)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (article == null)
             {
@@ -206,7 +210,13 @@ namespace CSD412GroupCWebApp
 
             if (ModelState.IsValid)
             {
-                article.Categories = _context.Category.Where(c => articleViewModel.SelectedCategoryIds.Contains(c.Id)).ToList();
+                var articleCategories = new HashSet<ArticleCategory>();
+                foreach (var selectedCategoryId in articleViewModel.SelectedCategoryIds)
+                {
+                    articleCategories.Add(new ArticleCategory() { ArticleId = articleViewModel.Article.Id, CategoryId = selectedCategoryId });
+                }
+
+                article.ArticleCategories = articleCategories;
 
                 var editedArticle = articleViewModel.Article;
                 article.Title = editedArticle.Title;
@@ -275,6 +285,8 @@ namespace CSD412GroupCWebApp
 
             var article = await _context.Article
                 .Include(a => a.Author)
+                .Include(a => a.ArticleCategories)
+                .ThenInclude(ac => ac.Category)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (article == null)
             {
@@ -295,7 +307,7 @@ namespace CSD412GroupCWebApp
         public async Task<IActionResult> DeleteConfirmed(long id)
         {
             var article = await _context.Article
-                .Include(a => a.Categories)
+                .Include(a => a.ArticleCategories)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (UserIsAdminOrArticleOwner(article))
@@ -303,7 +315,7 @@ namespace CSD412GroupCWebApp
                 return Forbid();
             }
 
-            article.Categories.Clear();
+            article.ArticleCategories.Clear();
             _context.Update(article);
 
             _context.Article.Remove(article);
