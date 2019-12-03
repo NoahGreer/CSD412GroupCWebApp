@@ -27,10 +27,13 @@ namespace CSD412GroupCWebApp.Data
                 new Category() { Id = 5, Name = "Travel", Description = "Articles about travel" },
                 new Category() { Id = 6, Name = "Science", Description = "Articles about science" },
             });
+
+            builder.Entity<ArticleCategory>().HasKey(ac => new { ac.ArticleId, ac.CategoryId });
         }
 
         public DbSet<CSD412GroupCWebApp.Models.Category> Category { get; set; }
 
         public DbSet<CSD412GroupCWebApp.Models.Article> Article { get; set; }
+        public DbSet<CSD412GroupCWebApp.Models.ArticleCategory> ArticleCategories { get; set; }
     }
 }
