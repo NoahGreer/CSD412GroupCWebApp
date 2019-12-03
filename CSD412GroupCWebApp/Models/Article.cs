@@ -17,7 +17,7 @@ namespace CSD412GroupCWebApp.Models
         public bool IsPublished { get; set; } = false;
         [Display(Name = "URL Slug")]
         public string UrlSlug { get; set; }
-        public virtual List<Category> Categories { get; set; }
+        public virtual ICollection<Category> Categories { get; set; }
         [Display(Name = "Date Posted")]
         public DateTime? DatePosted { get; set; }
     }
